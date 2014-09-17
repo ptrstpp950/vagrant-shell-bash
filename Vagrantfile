@@ -16,6 +16,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     mkdir -p /etc/yum.repos.d/disabled
     mv -f /etc/yum.repos.d/*.repo /etc/yum.repos.d/disabled/;
     cp -f /vagrant/local-vagrant.repo /etc/yum.repos.d/'
+  
+  config.vm.provision :shell, :inline  => '
+    sudo yum install -y jdk
+    sudo yum install -y zookeeper
+    /bin/cp -f /vagrant/zookeeper.initd /etc/init.d/zookeeper
+    /etc/init.d/zookeeper start
+    /etc/init.d/zookeeper status'
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
