@@ -11,6 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "centos-6.4"
+  config.vm.network "forwarded_port", guest: 8080, host: 9876
   config.vm.synced_folder "../internal-repo", "/vagrant_localrepo"
   config.vm.provision :shell, :inline  => '
     mkdir -p /etc/yum.repos.d/disabled
@@ -30,6 +31,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
     cp /vagrant/*.ini /etc/supervisord.d/
     /etc/init.d/supervisord start'
+
+  config.vm.provision :shell, :inline  => '/etc/init.d/iptables stop'
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
